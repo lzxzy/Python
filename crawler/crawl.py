@@ -1,5 +1,9 @@
 #!/usr/bin/env python3.4
 from selectors import DefaultSelector,EVENT_WRITE
+import argparse
+import asyncio
+import logging
+import sys
 
 selector = DefaultSelector()
 
@@ -20,7 +24,9 @@ selector.register(sock.fileno(),EVENT_WRITE,connected)
 def loop():
 	while  True:
 		events = selector.select()
-		pass
+		for event_key,event_mask in events:
+			callback = event_key.data
+			callback()
 request = 'GET {} HTTP/1.0\r\nHost: zhihu.com\r\n\r\n'.format(url)
 encoded = request.encoded('ascii')
 
